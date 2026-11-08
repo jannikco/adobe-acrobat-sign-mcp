@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "status": "ready",
+  "verification": "mock-only",
+  "releaseEligible": true,
+  "maintainer": "jannikco",
+  "license": "MIT",
+  "sourceRevision": "808f00fe4757f1158252718cec8d8672d385784fd329f4e2e2e56d679557ad4b",
+  "evidence": [
+    "Source-backed provider setup metadata",
+    "Offline configuration and MCP protocol tests"
+  ],
+  "provenance": [
+    "https://secure.na1.adobesign.com/restapijson/v6/restapi.json"
+  ],
+  "id": "adobe-acrobat-sign-mcp",
+  "kind": "mcp-setup",
+  "product": "pipmcp",
+  "title": "Adobe Acrobat Sign MCP setup and connection checker",
+  "description": "Generate Adobe Acrobat Sign MCP client configuration, inspect available tools and validate hosted endpoint access through PipMCP.",
+  "operationIds": [],
+  "appSlug": "adobe-acrobat-sign",
+  "appName": "Adobe Acrobat Sign",
+  "providerDocs": "https://secure.na1.adobesign.com/restapijson/v6/restapi.json",
+  "providerWebsite": "https://www.adobe.com/acrobat/business/sign.html",
+  "authentication": {
+    "type": "bearer",
+    "requiredCredentialFields": [
+      "token"
+    ],
+    "requiredHeaderNames": [],
+    "helpUrl": "https://helpx.adobe.com/sign/kb/how-to-create-an-integration-key.html",
+    "tenantRequired": true,
+    "accountParameterNames": []
+  },
+  "attributionSlug": "github-adobe-acrobat-sign-mcp"
+}
