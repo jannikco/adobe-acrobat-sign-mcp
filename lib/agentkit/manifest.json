@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "product": "pipmcp",
+  "credential": "PIPMCP_API_KEY",
+  "skills": [
+    {
+      "name": "pipmcp-adobe-acrobat-sign",
+      "description": "Connect AI agents to Adobe Acrobat Sign using one PipMCP API key and actual hosted tool discovery."
+    }
+  ],
+  "files": {
+    "skills/pipmcp-adobe-acrobat-sign/SKILL.md": "c670ca099b6d799482b72b00c59fa9c65faa782c4438f27f6a365e1488fae7fb"
+  }
+}
