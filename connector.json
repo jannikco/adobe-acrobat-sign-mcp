@@ -1,0 +1,249 @@
+{
+  "id": "adobe-acrobat-sign",
+  "name": "Adobe Acrobat Sign",
+  "version": "0.1.0",
+  "baseUrl": "https://api.{ADOBE_SIGN_SHARD}.adobesign.com/api/rest/v6",
+  "auth": {
+    "type": "bearer",
+    "env": "ADOBE_SIGN_ACCESS_TOKEN"
+  },
+  "tools": [
+    {
+      "name": "adobe_sign_list_agreements",
+      "description": "adobe sign list agreements",
+      "method": "GET",
+      "path": "/agreements",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "bindings": {
+        "path": [],
+        "query": {},
+        "body": {}
+      },
+      "approvalRequired": false,
+      "provenance": [
+        "https://secure.na1.adobesign.com/restapijson/v6/restapi.json"
+      ],
+      "evidence": {
+        "state": "documented",
+        "providerLiveValidation": "not-run"
+      },
+      "sampleArguments": {}
+    },
+    {
+      "name": "adobe_sign_get_agreement",
+      "description": "adobe sign get agreement",
+      "method": "GET",
+      "path": "/agreements/{agreementId}",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "agreementId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "agreementId"
+        ],
+        "additionalProperties": false
+      },
+      "bindings": {
+        "path": [
+          "agreementId"
+        ],
+        "query": {},
+        "body": {}
+      },
+      "approvalRequired": false,
+      "provenance": [
+        "https://secure.na1.adobesign.com/restapijson/v6/restapi.json"
+      ],
+      "evidence": {
+        "state": "documented",
+        "providerLiveValidation": "not-run"
+      },
+      "sampleArguments": {
+        "agreementId": "REPLACE_WITH_AUTHORIZED_AGREEMENT_ID"
+      }
+    },
+    {
+      "name": "adobe_sign_create_draft",
+      "description": "Create a DRAFT agreement using existing document references; does not send signature invitations.",
+      "method": "POST",
+      "path": "/agreements",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "fileInfos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "minItems": 1
+          },
+          "participantSetsInfo": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "name",
+          "fileInfos",
+          "participantSetsInfo"
+        ],
+        "additionalProperties": false
+      },
+      "bindings": {
+        "path": [],
+        "query": {},
+        "body": {
+          "name": "name",
+          "fileInfos": "fileInfos",
+          "participantSetsInfo": "participantSetsInfo"
+        }
+      },
+      "approvalRequired": true,
+      "body": {
+        "signatureType": "ESIGN",
+        "state": "DRAFT"
+      },
+      "provenance": [
+        "https://secure.na1.adobesign.com/restapijson/v6/restapi.json"
+      ],
+      "evidence": {
+        "state": "documented",
+        "providerLiveValidation": "not-run"
+      },
+      "sampleArguments": {
+        "name": "Sandbox Example",
+        "fileInfos": [
+          {
+            "transientDocumentId": "REPLACE_WITH_AUTHORIZED_TRANSIENT_DOCUMENT_ID"
+          }
+        ],
+        "participantSetsInfo": [
+          {
+            "memberInfos": [
+              {
+                "email": "sandbox@example.com"
+              }
+            ],
+            "order": 1,
+            "role": "SIGNER"
+          }
+        ]
+      }
+    }
+  ],
+  "workflow": {
+    "name": "adobe-acrobat-sign-workflow",
+    "description": "Inspect signature agreements and prepare a DRAFT from existing document references without sending invitations.",
+    "steps": [
+      "adobe_sign_list_agreements",
+      "adobe_sign_get_agreement",
+      "adobe_sign_create_draft"
+    ]
+  },
+  "provenance": [
+    "https://secure.na1.adobesign.com/restapijson/v6/restapi.json"
+  ],
+  "sourceEvidence": {
+    "state": "documented",
+    "providerLiveValidation": "not-run",
+    "checkedAt": "2026-11-08",
+    "operationCount": 3,
+    "kind": "official-openapi",
+    "sha256": "f168acc2ba445f834eab5ac80cc35277623e8fd6b29749cad97210b2cecde11e"
+  },
+  "setup": {
+    "requiresPipMcpAccount": false,
+    "credentialsHelpUrl": "https://helpx.adobe.com/sign/kb/how-to-create-an-integration-key.html",
+    "instructions": "Sign in to Acrobat Sign as an account administrator and go to Account → Acrobat Sign API → API Information → Integration Key. Name the key, tick the scopes you want (e.g. agreement_read, agreement_write, agreement_send, library_read, user_read) and copy the key. Integration keys need an Enterprise or Developer subscription; also enter your account's shard (the na1 in secure.na1.adobesign.com, shown in the address bar after you log in)."
+  },
+  "sampleWarning": "Example IDs are placeholders, not known provider records. Replace them with authorized sandbox/account IDs. Contact emails, file URLs and recipient numbers must be replaced with data you are authorized to use. Examples never authorize a write.",
+  "repoId": "adobe-acrobat-sign-mcp",
+  "appSlug": "adobe-acrobat-sign",
+  "product": "pipmcp",
+  "artifactType": "connector",
+  "sourceRevision": "6bf32cea42da64ae0c25a75a3801f5ee2a9d678c857a125116f6173d08a95bc2",
+  "capabilityEvidence": {
+    "local": {
+      "level": "Tested",
+      "operations": [
+        {
+          "name": "adobe_sign_list_agreements",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        },
+        {
+          "name": "adobe_sign_get_agreement",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        },
+        {
+          "name": "adobe_sign_create_draft",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        }
+      ],
+      "evidenceRefs": [
+        "Provider request/stdio contract tests"
+      ],
+      "mode": "local"
+    },
+    "managed": {
+      "level": "Documented",
+      "operations": [
+        {
+          "name": "adobe_sign_list_agreements",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        },
+        {
+          "name": "adobe_sign_get_agreement",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        },
+        {
+          "name": "adobe_sign_create_draft",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        }
+      ],
+      "evidenceRefs": [],
+      "mode": "managed"
+    }
+  },
+  "managedAvailability": {
+    "status": "import-required",
+    "integration": "openapi-to-mcp",
+    "checkedAt": "2026-11-08T12:29:10.433747+00:00"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Adobe Acrobat Sign selected operations",
+    "version": "0.1.0",
+    "description": "Reviewed local connector bindings for manual API import. No provider credentials are included; authentication and hosted execution require separate configuration and tests."
+  },
+  "servers": [
+    {
+      "url": "https://api.{ADOBE_SIGN_SHARD}.adobesign.com/api/rest/v6",
+      "variables": {
+        "ADOBE_SIGN_SHARD": {
+          "default": "your-account",
+          "description": "Replace with your own authorized provider account value."
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/agreements": {
+      "get": {
+        "operationId": "adobe_sign_list_agreements",
+        "summary": "adobe sign list agreements",
+        "parameters": [],
+        "x-pipmcp-read-only": true,
+        "responses": {
+          "200": {
+            "description": "Provider response; inspect provider documentation for result fields."
+          }
+        }
+      },
+      "post": {
+        "operationId": "adobe_sign_create_draft",
+        "summary": "Create a DRAFT agreement using existing document references; does not send signature invitations.",
+        "parameters": [],
+        "x-pipmcp-read-only": false,
+        "responses": {
+          "200": {
+            "description": "Provider response; inspect provider documentation for result fields."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "fileInfos": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    "minItems": 1
+                  },
+                  "participantSetsInfo": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    "minItems": 1
+                  },
+                  "signatureType": {
+                    "const": "ESIGN",
+                    "default": "ESIGN"
+                  },
+                  "state": {
+                    "const": "DRAFT",
+                    "default": "DRAFT"
+                  }
+                },
+                "required": [
+                  "name",
+                  "fileInfos",
+                  "participantSetsInfo",
+                  "signatureType",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agreements/{agreementId}": {
+      "get": {
+        "operationId": "adobe_sign_get_agreement",
+        "summary": "adobe sign get agreement",
+        "parameters": [
+          {
+            "name": "agreementId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-pipmcp-read-only": true,
+        "responses": {
+          "200": {
+            "description": "Provider response; inspect provider documentation for result fields."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "providerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "providerAuth": []
+    }
+  ]
+}

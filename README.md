@@ -1,49 +1,70 @@
-# Adobe Acrobat Sign MCP setup and connection checker
+# Adobe Acrobat Sign MCP server
 
-Generate Adobe Acrobat Sign MCP client configuration, inspect available tools and validate hosted endpoint access through PipMCP.
+Inspect signature agreements and prepare a DRAFT from existing document references without sending invitations.
 
-Maintainer: jannikco · License: MIT · Verification: **mock-only**
+A direct-provider MCP server with useful local execution. No PipMCP account is required for local use. Provider API access and any provider charges are your responsibility.
 
 ## Quick start
 
-Requires Node.js 22 or later.
+Requires Node.js22+. Clone this repository, then run:
 
 ```sh
-npm ci
+npm ci --ignore-scripts
 npm test
 npm start
 ```
 
-The default example runs locally without credentials and makes no external changes. Verification status describes recorded evidence; local configuration tests do not establish that provider authentication or execution works.
+The default command inspects the tools offline. Configure your own credentials in your environment:
 
-## Connect adobe-acrobat-sign
+- `ADOBE_SIGN_ACCESS_TOKEN`
+- `ADOBE_SIGN_SHARD`
 
-[Create or sign in to PipMCP](https://pipmcp.com/register?app=adobe-acrobat-sign&utm_source=github&utm_campaign=github-adobe-acrobat-sign-mcp) and select the integration. Connect your authorized provider account and copy its hosted MCP endpoint. Set PIPMCP_ENDPOINT and, if required, PIPMCP_TOKEN in your environment. Run npm start to produce client configuration; run npm start -- --live for a read-only connection check. Provider app presence is catalog evidence, not live verification.
 
-## Managed service
 
-[Continue with PipMCP](https://pipmcp.com/register?app=adobe-acrobat-sign&utm_source=github&utm_campaign=github-adobe-acrobat-sign-mcp). This repository is maintained by the integration team and does not imply endorsement by LinkedIn or other providers.
+Credential help: https://helpx.adobe.com/sign/kb/how-to-create-an-integration-key.html
 
-## Provenance and support
+## Execute a real read
 
-Source revision: 808f00fe4757f1158252718cec8d8672d385784fd329f4e2e2e56d679557ad4b. The complete manifest is in integration.json; SHA256SUMS covers the reviewed artifact. Open a repository issue without credentials or personal data. See SECURITY.md for sensitive reports. No telemetry is sent by this code; signup links include explicit campaign parameters.
+Replace example record IDs with records you are authorized to access.
 
-## Provider setup inventory
-
-Run `npm start -- --setup` to inspect this app's recorded authentication requirements and setup links offline. Credentials are entered in PipMCP; this repository lists required field names only.
-
-```json
-{
-  "type": "bearer",
-  "requiredCredentialFields": [
-    "token"
-  ],
-  "requiredHeaderNames": [],
-  "helpUrl": "https://helpx.adobe.com/sign/kb/how-to-create-an-integration-key.html",
-  "tenantRequired": true,
-  "accountParameterNames": []
-}
+```sh
+npm start -- --call adobe_sign_list_agreements '{}'
 ```
 
-Provider documentation: https://secure.na1.adobesign.com/restapijson/v6/restapi.json
-Provider website: https://www.adobe.com/acrobat/business/sign.html
+## Use with an MCP client
+
+Launch `node /absolute/path/adobe-acrobat-sign-mcp/server.mjs` using stdio transport; pass credentials through the client environment. Stdout is reserved for JSON-RPC.
+
+## Tools
+
+| Tool | Effect | Purpose |
+| --- | --- | --- |
+| adobe_sign_list_agreements | Read | adobe sign list agreements |
+| adobe_sign_get_agreement | Read | adobe sign get agreement |
+| adobe_sign_create_draft | Explicit approval required | Create a DRAFT agreement using existing document references; does not send signature invitations. |
+
+## Concrete workflow
+
+Inspect signature agreements and prepare a DRAFT from existing document references without sending invitations.
+
+1. adobe_sign_list_agreements
+2. adobe_sign_get_agreement
+3. adobe_sign_create_draft
+
+## Optional writes
+
+Writes are disabled by default. Set CONNECTOR_ALLOW_WRITES=true and supply `_approval: {approved:true,idempotencyKey:"unique-request-id"}` on the specific call. Do not reuse a key for a different request. Uncertain outcomes are never automatically replayed; inspect the provider before another attempt.
+
+## Capability evidence
+
+Local: **Tested — HTTP fixtures and real stdio tools/call**. Managed: **Documented**. Provider authentication and live operations have not been established by these fixture tests. Evidence applies per operation and execution mode; setup discovery does not imply provider execution.
+
+## Managed production
+
+[Import with PipMCP](https://pipmcp.com/github/start?integration=openapi-to-mcp&utm_source=github&utm_campaign=github-adobe-acrobat-sign-mcp&utm_content=readme) when you want the hosted service. This provider is not currently listed as a managed template. Import selected-openapi.json (REST) or the official GraphQL schema linked in provenance, configure authentication, and review the tools before execution. Local credentials are not uploaded by this code. Review provider permissions in the managed onboarding. [Directory and related projects](https://jannikco.github.io/pipmcp-connectors/integrations/adobe-acrobat-sign/).
+
+## Provenance and maintenance
+
+- https://secure.na1.adobesign.com/restapijson/v6/restapi.json
+
+Maintainer:jannikco. MIT license for this code. See connector.json for selected operations and integration.json for evidence. Runtime dependencies retain their own licenses. Report sensitive issues through https://pipmcp.com/contact; do not post credentials or customer data in public issues.
